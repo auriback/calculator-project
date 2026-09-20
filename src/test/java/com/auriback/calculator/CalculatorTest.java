@@ -28,7 +28,7 @@ public class CalculatorTest {
     }
 
     @Test
-    public void divisionByZeroThrowsException() {
+    public void whenDivisionByZeroThenThrowsException() {
         assertThrows(ArithmeticException.class,
                 () -> Calculator.calculate(10, 0, "/"));
     }
