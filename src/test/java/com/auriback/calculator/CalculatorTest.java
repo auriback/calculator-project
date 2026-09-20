@@ -4,6 +4,7 @@ import com.auriback.calculator.calculator.Calculator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CalculatorTest {
     @Test
@@ -24,5 +25,11 @@ public class CalculatorTest {
     @Test
     public void when4Multiply6Then24() {
         assertEquals(24, Calculator.calculate(4, 6, "*"));
+    }
+
+    @Test
+    public void divisionByZeroThrowsException() {
+        assertThrows(ArithmeticException.class,
+                () -> Calculator.calculate(10, 0, "/"));
     }
 }
