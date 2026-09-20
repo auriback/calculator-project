@@ -1,4 +1,4 @@
-package com.github.auriback;
+package com.github.auriback.calculator;
 
 import com.github.auriback.calculator.calculator.Calculator;
 
