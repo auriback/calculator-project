@@ -29,23 +29,13 @@ public class Main {
             return;
         }
 
-        int result = 0;
-        switch (operator) {
-            case "+":
-                result = a + b;
-                break;
-            case "-":
-                result = a - b;
-                break;
-            case "*":
-                result = a * b;
-                break;
-            case "/":
-                result = a / b;
-                break;
-            default:
-                break;
-        }
+        int result = switch (operator) {
+            case "+" -> a + b;
+            case "-" -> a - b;
+            case "*" -> a * b;
+            case "/" -> a / b;
+            default -> 0;
+        };
         System.out.println(a + " " + operator + " " + b + " = " + result);
     }
 }
