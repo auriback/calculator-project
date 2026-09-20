@@ -1,4 +1,6 @@
-import com.github.auriback.calculator.Calculator;
+package com.github.auriback;
+
+import com.github.auriback.calculator.calculator.Calculator;
 
 import java.util.Scanner;
 
