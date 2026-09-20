@@ -1,6 +1,6 @@
-package com.github.auriback.calculator;
+package com.auriback.calculator;
 
-import com.github.auriback.calculator.calculator.Calculator;
+import com.auriback.calculator.calculator.Calculator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

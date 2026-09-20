@@ -1,4 +1,4 @@
-package com.github.auriback.calculator.calculator;
+package com.auriback.calculator.calculator;
 
 public class Calculator {
 
