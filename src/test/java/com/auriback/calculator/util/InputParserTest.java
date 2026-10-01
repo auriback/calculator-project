@@ -1,7 +1,7 @@
-package com.auriback.calculator;
+package com.auriback.calculator.util;
 
-import com.auriback.calculator.util.InputParser;
-import com.auriback.calculator.util.Operator;
+import com.auriback.calculator.models.Expression;
+import com.auriback.calculator.models.Operator;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class InputParserTest {
+class InputParserTest {
 
     @ParameterizedTest(name = "Тест {index}: [{0}] результат: {1}, {2}, {3}")
     @CsvSource({
@@ -21,9 +21,9 @@ public class InputParserTest {
             "4 * 6, 4, *, 6",
             "-10 / -3, -10, /, -3"
     })
-    public void whenValidFormatStringThenCorrectValues(String inputString,
-                                                       int expectedA, String expectedOperator, int expectedB) {
-        InputParser.Expression calc = InputParser.parseString(inputString);
+    void whenValidFormatStringThenCorrectValues(String inputString,
+                                                int expectedA, String expectedOperator, int expectedB) {
+        Expression calc = InputParser.parseInput(inputString);
 
         assertAll("Проверка полей структуры Calculation",
                 () -> assertEquals(expectedA, calc.a()),
@@ -38,9 +38,9 @@ public class InputParserTest {
             "     ",
             ""
     })
-    public void whenNullOrEmptyStringThenThrowsException(String inputString) {
+    void whenNullOrEmptyStringThenThrowsException(String inputString) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> InputParser.parseString(inputString));
+                () -> InputParser.parseInput(inputString));
 
         assertEquals(InputParser.ERROR_EMPTY_INPUT_STRING, exception.getMessage());
     }
@@ -55,9 +55,9 @@ public class InputParserTest {
             "'abc + 999999999999'; буквы и переполнение",
             "'999999999999 + abc'; переполнение и буквы"
     }, delimiter = ';')
-    public void whenInvalidFormatStringThenThrowsException(String inputString, String caseDescription) {
+    void whenInvalidFormatStringThenThrowsException(String inputString, String caseDescription) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> InputParser.parseString(inputString));
+                () -> InputParser.parseInput(inputString));
 
         assertEquals(InputParser.ERROR_INCORRECT_INPUT_FORMAT, exception.getMessage());
     }
@@ -72,9 +72,9 @@ public class InputParserTest {
             "'100000000000000 $ 2000000000000'; переполнение обоих чисел и невалидный оператор; $"
 
     }, delimiter = ';')
-    public void whenInvalidOperationStringThenThrowsException(String inputString, String caseDescription, String expectedBadOperator) {
+    void whenInvalidOperationStringThenThrowsException(String inputString, String caseDescription, String expectedBadOperator) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> InputParser.parseString(inputString));
+                () -> InputParser.parseInput(inputString));
 
         assertEquals(Operator.ERROR_UNKNOWN_OPERATOR.formatted(expectedBadOperator), exception.getMessage());
     }
@@ -85,9 +85,9 @@ public class InputParserTest {
             "-2147483649 - 1",
             "999999999999 * 2"
     })
-    public void whenNumberOverflowThenThrowsException(String inputString) {
+    void whenNumberOverflowThenThrowsException(String inputString) {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> InputParser.parseString(inputString));
+                () -> InputParser.parseInput(inputString));
 
         assertEquals(InputParser.ERROR_NUMBER_OVERFLOW, exception.getMessage());
     }

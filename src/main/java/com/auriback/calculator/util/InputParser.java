@@ -1,5 +1,8 @@
 package com.auriback.calculator.util;
 
+import com.auriback.calculator.models.Expression;
+import com.auriback.calculator.models.Operator;
+
 import java.math.BigInteger;
 
 public class InputParser {
@@ -10,10 +13,7 @@ public class InputParser {
     private InputParser() {
     }
 
-    public record Expression(int a, int b, Operator operator) {
-    }
-
-    public static Expression parseString(String inputString) {
+    public static Expression parseInput(String inputString) {
         if (isEmptyInputString(inputString)) {
             throw new IllegalArgumentException(ERROR_EMPTY_INPUT_STRING);
         }
@@ -36,7 +36,7 @@ public class InputParser {
             int a = bigA.intValueExact();
             int b = bigB.intValueExact();
 
-            return new Expression(a, b, operator);
+            return new Expression(a, operator, b);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(ERROR_INCORRECT_INPUT_FORMAT);
         } catch (ArithmeticException e) {

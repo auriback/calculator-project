@@ -1,4 +1,4 @@
-package com.auriback.calculator.util;
+package com.auriback.calculator.models;
 
 public enum Operator {
     ADD("+"),
@@ -18,12 +18,11 @@ public enum Operator {
     }
 
     public static Operator fromString(String symbol) {
-        return switch (symbol) {
-            case "+" -> ADD;
-            case "-" -> SUBTRACT;
-            case "*" -> MULTIPLY;
-            case "/" -> DIVIDE;
-            default -> throw new IllegalArgumentException(ERROR_UNKNOWN_OPERATOR.formatted(symbol));
-        };
+        for (Operator op : values()) {
+            if (op.symbol.equals(symbol)) {
+                return op;
+            }
+        }
+        throw new IllegalArgumentException(ERROR_UNKNOWN_OPERATOR.formatted(symbol));
     }
 }
