@@ -9,6 +9,7 @@ public class InputParser {
     public static final String ERROR_EMPTY_INPUT_STRING = "Строка не может быть пустой!";
     public static final String ERROR_INCORRECT_INPUT_FORMAT = "Ошибка: неверный формат. Используйте: число оператор число";
     public static final String ERROR_NUMBER_OVERFLOW = "Ошибка: введено слишком большое или слишком маленькое число!";
+    public static final String SPLIT_REGEX = "\\s+";
 
     private InputParser() {
     }
@@ -18,7 +19,7 @@ public class InputParser {
             throw new IllegalArgumentException(ERROR_EMPTY_INPUT_STRING);
         }
 
-        String[] parts = inputString.strip().split("\\s+");
+        String[] parts = inputString.strip().split(SPLIT_REGEX);
         if (isNotCorrectInputParts(parts)) {
             throw new IllegalArgumentException(ERROR_INCORRECT_INPUT_FORMAT);
         }
