@@ -22,12 +22,12 @@ class InputParserTest {
             "-10 / -3, -10, /, -3"
     })
     void whenValidFormatStringThenCorrectValues(String inputString,
-                                                int expectedA, String expectedOperator, int expectedB) {
+                                                int expectedFirstNumber, String expectedOperator, int expectedSecondNumber) {
         Expression calc = InputParser.parseInput(inputString);
 
         assertAll("Проверка полей структуры Calculation",
-                () -> assertEquals(expectedA, calc.a()),
-                () -> assertEquals(expectedB, calc.b()),
+                () -> assertEquals(expectedFirstNumber, calc.firstNumber()),
+                () -> assertEquals(expectedSecondNumber, calc.secondNumber()),
                 () -> assertEquals(expectedOperator, calc.operator().getSymbol())
         );
     }

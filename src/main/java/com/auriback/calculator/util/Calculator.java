@@ -11,20 +11,20 @@ public class Calculator {
     }
 
     public static int calculate(Expression expression) {
-        int a = expression.a();
-        int b = expression.b();
+        int firstNumber = expression.firstNumber();
+        int secondNumber = expression.secondNumber();
         Operator operator = expression.operator();
 
-        if (operator == Operator.DIVIDE && b == 0) {
+        if (operator == Operator.DIVIDE && secondNumber == 0) {
             throw new ArithmeticException(ERROR_DIVISION_BY_ZERO);
         }
 
         try {
             return switch (operator) {
-                case ADD -> Math.addExact(a, b);
-                case SUBTRACT -> Math.subtractExact(a, b);
-                case MULTIPLY -> Math.multiplyExact(a, b);
-                case DIVIDE -> Math.divideExact(a, b);
+                case ADD -> Math.addExact(firstNumber, secondNumber);
+                case SUBTRACT -> Math.subtractExact(firstNumber, secondNumber);
+                case MULTIPLY -> Math.multiplyExact(firstNumber, secondNumber);
+                case DIVIDE -> Math.divideExact(firstNumber, secondNumber);
             };
         } catch (ArithmeticException e) {
             throw new ArithmeticException(ERROR_ARITHMETIC_OVERFLOW);

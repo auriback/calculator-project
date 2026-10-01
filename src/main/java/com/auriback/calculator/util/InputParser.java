@@ -23,20 +23,20 @@ public class InputParser {
             throw new IllegalArgumentException(ERROR_INCORRECT_INPUT_FORMAT);
         }
 
-        String aStr = parts[0];
+        String firstNumberStr = parts[0];
         String operatorStr = parts[1];
-        String bStr = parts[2];
+        String secondNumberStr = parts[2];
 
         Operator operator = Operator.fromString(operatorStr);
 
         try {
-            BigInteger bigA = new BigInteger(aStr);
-            BigInteger bigB = new BigInteger(bStr);
+            BigInteger bigFirstNumber = new BigInteger(firstNumberStr);
+            BigInteger bigSecondNumber = new BigInteger(secondNumberStr);
 
-            int a = bigA.intValueExact();
-            int b = bigB.intValueExact();
+            int firstNumber = bigFirstNumber.intValueExact();
+            int secondNumber = bigSecondNumber.intValueExact();
 
-            return new Expression(a, operator, b);
+            return new Expression(firstNumber, operator, secondNumber);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(ERROR_INCORRECT_INPUT_FORMAT);
         } catch (ArithmeticException e) {
