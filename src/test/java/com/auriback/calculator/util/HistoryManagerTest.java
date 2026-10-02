@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HistoryManagerTest {
@@ -38,5 +39,26 @@ class HistoryManagerTest {
         historyManager.add(firstOperation);
         historyManager.add(lastOperation);
         assertEquals(lastOperation, historyManager.getLast());
+    }
+
+    @Test
+    void whenAddMoreTenOperationsThenOnlyTenRemain() {
+        HistoryManager historyManager = new HistoryManager();
+        historyManager.add("5.0 / 2.0 = 2.5");
+        historyManager.add("3.0 + 4.0 = 7.0");
+        historyManager.add("5.0 + 3.0 = 8.0");
+        historyManager.add("5.0 / 2.0 = 2.5");
+        historyManager.add("3.0 + 4.0 = 7.0");
+        historyManager.add("5.0 + 3.0 = 8.0");
+        historyManager.add("5.0 / 2.0 = 2.5");
+        historyManager.add("3.0 + 4.0 = 7.0");
+        historyManager.add("5.0 + 3.0 = 8.0");
+        historyManager.add("5.0 + 3.0 = 8.0");
+
+        String lastOperation = "5.0 / 2.0 = 2.5";
+        historyManager.add(lastOperation);
+        assertAll(
+                () -> assertEquals(10, historyManager.getOperations().size()),
+                () -> assertEquals(lastOperation, historyManager.getLast()));
     }
 }
