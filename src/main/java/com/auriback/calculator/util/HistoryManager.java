@@ -13,8 +13,8 @@ public class HistoryManager {
         historyOperations.add(operation);
     }
 
-    public List<String> getOperations() {
-        return historyOperations;
+    public int size() {
+        return historyOperations.size();
     }
 
     public void clear() {

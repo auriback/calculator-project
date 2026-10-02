@@ -17,8 +17,7 @@ class HistoryManagerTest {
         HistoryManager historyManager = new HistoryManager();
         historyManager.add(operation);
         historyManager.add(operation);
-        int historySize = historyManager.getOperations().size();
-        assertEquals(2, historySize);
+        assertEquals(2, historyManager.size());
     }
 
     @Test
@@ -28,7 +27,7 @@ class HistoryManagerTest {
         historyManager.add("3.0 + 4.0 = 7.0");
         historyManager.add("5.0 + 3.0 = 8.0");
         historyManager.clear();
-        assertEquals(0, historyManager.getOperations().size());
+        assertEquals(0, historyManager.size());
     }
 
     @Test
@@ -58,7 +57,7 @@ class HistoryManagerTest {
         String lastOperation = "5.0 / 2.0 = 2.5";
         historyManager.add(lastOperation);
         assertAll(
-                () -> assertEquals(10, historyManager.getOperations().size()),
+                () -> assertEquals(10, historyManager.size()),
                 () -> assertEquals(lastOperation, historyManager.getLast()));
     }
 }
