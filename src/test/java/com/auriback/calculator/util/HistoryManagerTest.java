@@ -29,4 +29,14 @@ class HistoryManagerTest {
         historyManager.clear();
         assertEquals(0, historyManager.getOperations().size());
     }
+
+    @Test
+    void whenRequestLastOperationThenGetLastOperation() {
+        HistoryManager historyManager = new HistoryManager();
+        String firstOperation = "5.0 / 2.0 = 2.5";
+        String lastOperation = "3.0 + 4.0 = 7.0";
+        historyManager.add(firstOperation);
+        historyManager.add(lastOperation);
+        assertEquals(lastOperation, historyManager.getLast());
+    }
 }

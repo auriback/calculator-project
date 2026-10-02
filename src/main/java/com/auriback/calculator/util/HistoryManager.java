@@ -17,4 +17,8 @@ public class HistoryManager {
     public void clear() {
         historyOperations.clear();
     }
+
+    public String getLast() {
+        return historyOperations.getLast();
+    }
 }
