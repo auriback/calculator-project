@@ -13,4 +13,8 @@ public class HistoryManager {
     public List<String> getOperations() {
         return historyOperations;
     }
+
+    public void clear() {
+        historyOperations.clear();
+    }
 }

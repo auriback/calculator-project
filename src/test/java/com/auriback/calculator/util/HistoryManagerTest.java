@@ -1,5 +1,6 @@
 package com.auriback.calculator.util;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -17,5 +18,15 @@ class HistoryManagerTest {
         historyManager.add(operation);
         int historySize = historyManager.getOperations().size();
         assertEquals(2, historySize);
+    }
+
+    @Test
+    void whenClearHistoryThenHistorySizeEquals0() {
+        HistoryManager historyManager = new HistoryManager();
+        historyManager.add("5.0 / 2.0 = 2.5");
+        historyManager.add("3.0 + 4.0 = 7.0");
+        historyManager.add("5.0 + 3.0 = 8.0");
+        historyManager.clear();
+        assertEquals(0, historyManager.getOperations().size());
     }
 }
