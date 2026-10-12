@@ -1,14 +1,16 @@
 package com.auriback.calculator.util;
 
+import com.auriback.calculator.models.Operation;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryManager {
     private static final int MAX_HISTORY_SIZE = 10;
 
-    private final List<String> historyOperations = new ArrayList<>(MAX_HISTORY_SIZE);
+    private final List<Operation> historyOperations = new ArrayList<>(MAX_HISTORY_SIZE);
 
-    public void add(String operation) {
+    public void add(Operation operation) {
         if (historyOperations.size() == MAX_HISTORY_SIZE) {
             historyOperations.removeFirst();
         }
@@ -23,7 +25,11 @@ public class HistoryManager {
         historyOperations.clear();
     }
 
-    public String getLast() {
+    public Operation getLast() {
         return historyOperations.getLast();
+    }
+
+    public List<Operation> getHistoryOperations() {
+        return List.copyOf(historyOperations);
     }
 }

@@ -3,23 +3,31 @@ package com.auriback.calculator;
 import com.auriback.calculator.models.Expression;
 import com.auriback.calculator.models.Operation;
 import com.auriback.calculator.util.Calculator;
+import com.auriback.calculator.util.HistoryManager;
 import com.auriback.calculator.util.InputParser;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
-    public static final String COMMAND_EXIT = "exit";
-    public static final String COMMAND_INPUT_SYMBOL = "> ";
-    public static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
-
-    public Application(Scanner scanner) {
-        this.scanner = scanner;
-    }
+    private static final String COMMAND_EXIT = "exit";
+    private static final String COMMAND_HISTORY = "history";
+    private static final String COMMAND_CLEAR = "clear";
+    private static final String COMMAND_LAST_OPERATION = "last";
+    private static final String COMMAND_INPUT_SYMBOL = "> ";
+    private static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
+    private static final String MSG_HISTORY_EMPTY = "История операций пуста";
+    private static final String MSG_HISTORY_CLEAR = "История операций очищена";
 
     private final Scanner scanner;
+    private final HistoryManager historyManager;
     private boolean isRunning = true;
+
+    public Application(Scanner scanner, HistoryManager historyManager) {
+        this.scanner = scanner;
+        this.historyManager = historyManager;
+    }
 
     public void run() {
         while (isRunning) {
@@ -34,26 +42,37 @@ public class Application {
     }
 
     private void processing() {
-        processInput().ifPresent(input -> {
-            Expression expression = parseInput(input);
-            BigDecimal result = calculate(expression);
-            printResult(new Operation(expression, result));
-        });
-    }
-
-    private Optional<String> processInput() {
         String input = readInput();
 
         if (isEmptyInput(input)) {
-            return Optional.empty();
+            return;
         }
 
         if (isInputStopCommand(input)) {
             stopInput();
-            return Optional.empty();
+            return;
         }
 
-        return Optional.of(input);
+        if (isInputHistoryCommand(input)) {
+            printHistory();
+            return;
+        }
+
+        if (isInputClearCommand(input)) {
+            clearHistoryWithPrompt();
+            return;
+        }
+
+        if (isInputLastCommand(input)) {
+            processLastOperation();
+            return;
+        }
+
+        Expression expression = parseInput(input);
+        BigDecimal result = calculate(expression);
+        Operation operation = new Operation(expression, result);
+        printResult(operation);
+        addOperationToHistory(operation);
     }
 
     private String readInput() {
@@ -79,6 +98,41 @@ public class Application {
         isRunning = false;
     }
 
+    private boolean isInputHistoryCommand(String input) {
+        return COMMAND_HISTORY.equalsIgnoreCase(input);
+    }
+
+    private void printHistory() {
+        List<Operation> operations = historyManager.getHistoryOperations();
+        if (operations.isEmpty()) {
+            System.out.println(MSG_HISTORY_EMPTY);
+            return;
+        }
+        operations.forEach(System.out::println);
+    }
+
+    private boolean isInputClearCommand(String input) {
+        return COMMAND_CLEAR.equalsIgnoreCase(input);
+    }
+
+    private void clearHistoryWithPrompt() {
+        historyManager.clear();
+        System.out.println(MSG_HISTORY_CLEAR);
+    }
+
+    private boolean isInputLastCommand(String input) {
+        return COMMAND_LAST_OPERATION.equalsIgnoreCase(input);
+    }
+
+    private void processLastOperation() {
+        List<Operation> operations = historyManager.getHistoryOperations();
+        if (operations.isEmpty()) {
+            System.out.println(MSG_HISTORY_EMPTY);
+            return;
+        }
+        System.out.println(historyManager.getLast());
+    }
+
     private Expression parseInput(String input) {
         return InputParser.parseInput(input);
     }
@@ -89,5 +143,9 @@ public class Application {
 
     private void printResult(Operation operation) {
         System.out.println(operation);
+    }
+
+    private void addOperationToHistory(Operation operation) {
+        historyManager.add(operation);
     }
 }
