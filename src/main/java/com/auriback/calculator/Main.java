@@ -7,8 +7,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            Application app = new Application(scanner, new HistoryManager());
-            app.run();
+            bootstrapApplication(scanner).run();
         }
+    }
+
+    private static Application bootstrapApplication(Scanner scanner) {
+        HistoryManager historyManager = new HistoryManager();
+        return new Application(scanner, historyManager);
     }
 }
