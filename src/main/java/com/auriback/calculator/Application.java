@@ -44,35 +44,19 @@ public class Application {
     private void processing() {
         String input = readInput();
 
-        if (isEmptyInput(input)) {
+        if (input.isBlank()) {
             return;
         }
 
-        if (isInputStopCommand(input)) {
-            stopInput();
-            return;
-        }
+        Runnable command = switch (input.toLowerCase()) {
+            case COMMAND_EXIT -> this::stopInput;
+            case COMMAND_HISTORY -> this::printHistory;
+            case COMMAND_CLEAR -> this::clearHistoryWithPrompt;
+            case COMMAND_LAST_OPERATION -> this::processLastOperation;
+            default -> () -> calculateAndRecord(input);
+        };
 
-        if (isInputHistoryCommand(input)) {
-            printHistory();
-            return;
-        }
-
-        if (isInputClearCommand(input)) {
-            clearHistoryWithPrompt();
-            return;
-        }
-
-        if (isInputLastCommand(input)) {
-            processLastOperation();
-            return;
-        }
-
-        Expression expression = parseInput(input);
-        BigDecimal result = calculate(expression);
-        Operation operation = new Operation(expression, result);
-        printResult(operation);
-        addOperationToHistory(operation);
+        command.run();
     }
 
     private String readInput() {
@@ -86,20 +70,8 @@ public class Application {
         return scanner.nextLine().strip();
     }
 
-    private boolean isEmptyInput(String input) {
-        return input.isBlank();
-    }
-
-    private boolean isInputStopCommand(String input) {
-        return COMMAND_EXIT.equalsIgnoreCase(input);
-    }
-
     private void stopInput() {
         isRunning = false;
-    }
-
-    private boolean isInputHistoryCommand(String input) {
-        return COMMAND_HISTORY.equalsIgnoreCase(input);
     }
 
     private void printHistory() {
@@ -111,17 +83,9 @@ public class Application {
         operations.forEach(System.out::println);
     }
 
-    private boolean isInputClearCommand(String input) {
-        return COMMAND_CLEAR.equalsIgnoreCase(input);
-    }
-
     private void clearHistoryWithPrompt() {
         historyManager.clear();
         System.out.println(MSG_HISTORY_CLEAR);
-    }
-
-    private boolean isInputLastCommand(String input) {
-        return COMMAND_LAST_OPERATION.equalsIgnoreCase(input);
     }
 
     private void processLastOperation() {
@@ -131,6 +95,14 @@ public class Application {
             return;
         }
         System.out.println(historyManager.getLast());
+    }
+
+    private void calculateAndRecord(String input) {
+        Expression expression = parseInput(input);
+        BigDecimal result = calculate(expression);
+        Operation operation = new Operation(expression, result);
+        printResult(operation);
+        addOperationToHistory(operation);
     }
 
     private Expression parseInput(String input) {
