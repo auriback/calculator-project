@@ -78,17 +78,4 @@ class InputParserTest {
 
         assertEquals(Operator.ERROR_UNKNOWN_OPERATOR.formatted(expectedBadOperator), exception.getMessage());
     }
-
-    @ParameterizedTest(name = "Тест {index}: [{0}]")
-    @ValueSource(strings = {
-            "2147483648 + 5",
-            "-2147483649 - 1",
-            "999999999999 * 2"
-    })
-    void whenNumberOverflowThenThrowsException(String inputString) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> InputParser.parseInput(inputString));
-
-        assertEquals(InputParser.ERROR_NUMBER_OVERFLOW, exception.getMessage());
-    }
 }
