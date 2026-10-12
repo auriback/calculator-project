@@ -4,6 +4,7 @@ import com.auriback.calculator.models.Operation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class HistoryManager {
     private static final int MAX_HISTORY_SIZE = 10;
@@ -25,8 +26,11 @@ public class HistoryManager {
         historyOperations.clear();
     }
 
-    public Operation getLast() {
-        return historyOperations.getLast();
+    public Optional<Operation> getLast() {
+        if (historyOperations.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(historyOperations.getLast());
     }
 
     public List<Operation> getHistoryOperations() {

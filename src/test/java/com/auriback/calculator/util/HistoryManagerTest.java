@@ -41,7 +41,7 @@ class HistoryManagerTest {
     @Test
     void whenRequestLastOperationThenGetLastAdded() {
         addTestOperationsToList();
-        assertEquals(operation4, historyManager.getLast());
+        assertEquals(operation4, historyManager.getLast().orElseThrow());
     }
 
     @Test
@@ -54,7 +54,7 @@ class HistoryManagerTest {
 
         assertAll(
                 () -> assertEquals(10, historyManager.size()),
-                () -> assertEquals(operation2, historyManager.getLast()),
+                () -> assertEquals(operation2, historyManager.getLast().orElseThrow()),
                 () -> assertEquals(operation1, historyManager.getHistoryOperations().getFirst()));
     }
 
