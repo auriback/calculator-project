@@ -1,9 +1,11 @@
 package com.auriback.calculator;
 
 import com.auriback.calculator.models.Expression;
+import com.auriback.calculator.models.Operation;
 import com.auriback.calculator.util.Calculator;
 import com.auriback.calculator.util.InputParser;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -31,8 +33,8 @@ public class Application {
     private void processing() {
         processInput().ifPresent(input -> {
             Expression expression = parseInput(input);
-            int result = calculate(expression);
-            printResult(expression, result);
+            BigDecimal result = calculate(expression);
+            printResult(new Operation(expression, result));
         });
     }
 
@@ -72,11 +74,11 @@ public class Application {
         return InputParser.parseInput(input);
     }
 
-    private int calculate(Expression expression) {
+    private BigDecimal calculate(Expression expression) {
         return Calculator.calculate(expression);
     }
 
-    private void printResult(Expression expression, int result) {
-        System.out.println(expression + " = " + result);
+    private void printResult(Operation operation) {
+        System.out.println(operation);
     }
 }
