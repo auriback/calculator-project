@@ -12,20 +12,23 @@ import java.util.Scanner;
 public class Application {
     public static final String COMMAND_EXIT = "exit";
     public static final String COMMAND_INPUT_SYMBOL = "> ";
+    public static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s";
 
-    private Scanner scanner;
+    public Application(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    private final Scanner scanner;
     private boolean isRunning = true;
 
     public void run() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            this.scanner = scanner;
-
-            while (isRunning) {
-                try {
-                    processing();
-                } catch (ArithmeticException | IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
-                }
+        while (isRunning) {
+            try {
+                processing();
+            } catch (ArithmeticException | IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println(ERROR_UNEXPECTED.formatted(e.getMessage()));
             }
         }
     }
@@ -55,6 +58,12 @@ public class Application {
 
     private String readInput() {
         System.out.print(COMMAND_INPUT_SYMBOL);
+
+        if (!scanner.hasNextLine()) {
+            stopInput();
+            return "";
+        }
+
         return scanner.nextLine().strip();
     }
 
