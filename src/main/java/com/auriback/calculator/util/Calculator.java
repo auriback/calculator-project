@@ -2,57 +2,39 @@ package com.auriback.calculator.util;
 
 import com.auriback.calculator.models.Expression;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
+
 public class Calculator {
     public static final String ERROR_DIVISION_BY_ZERO = "Ошибка: деление на ноль";
-    public static final String ERROR_ARITHMETIC_OVERFLOW = "Ошибка: результат операции вышел за пределы допустимых значений!";
+    public static final String ERROR_INCORRECT_VALUE = "Ошибка: Значение выражения не может быть NULL";
+    private static final int NUMBER_SCALE = 2;
+    private static final RoundingMode NUMBER_ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
     private Calculator() {
     }
 
-    public static int calculate(Expression expression) {
-        int firstNumber = expression.firstNumber();
-        int secondNumber = expression.secondNumber();
+    public static BigDecimal calculate(Expression expression) {
+        Objects.requireNonNull(expression, ERROR_INCORRECT_VALUE);
 
-        return switch (expression.operator()) {
-            case ADD -> add(firstNumber, secondNumber);
-            case SUBTRACT -> subtract(firstNumber, secondNumber);
-            case MULTIPLY -> multiply(firstNumber, secondNumber);
+        BigDecimal firstNumber = expression.firstNumber();
+        BigDecimal secondNumber = expression.secondNumber();
+
+        BigDecimal result = switch (expression.operator()) {
+            case ADD -> firstNumber.add(secondNumber);
+            case SUBTRACT -> firstNumber.subtract(secondNumber);
+            case MULTIPLY -> firstNumber.multiply(secondNumber);
             case DIVIDE -> divide(firstNumber, secondNumber);
         };
+
+        return result.setScale(NUMBER_SCALE, NUMBER_ROUNDING_MODE);
     }
 
-    private static int add(int firstNumber, int secondNumber) {
-        try {
-            return Math.addExact(firstNumber, secondNumber);
-        } catch (ArithmeticException e) {
-            throw new ArithmeticException(ERROR_ARITHMETIC_OVERFLOW);
-        }
-    }
-
-    private static int subtract(int firstNumber, int secondNumber) {
-        try {
-            return Math.subtractExact(firstNumber, secondNumber);
-        } catch (ArithmeticException e) {
-            throw new ArithmeticException(ERROR_ARITHMETIC_OVERFLOW);
-        }
-    }
-
-    private static int multiply(int firstNumber, int secondNumber) {
-        try {
-            return Math.multiplyExact(firstNumber, secondNumber);
-        } catch (ArithmeticException e) {
-            throw new ArithmeticException(ERROR_ARITHMETIC_OVERFLOW);
-        }
-    }
-
-    private static int divide(int firstNumber, int secondNumber) {
-        if (secondNumber == 0) {
+    private static BigDecimal divide(BigDecimal firstNumber, BigDecimal secondNumber) {
+        if (secondNumber.compareTo(BigDecimal.ZERO) == 0) {
             throw new ArithmeticException(ERROR_DIVISION_BY_ZERO);
         }
-        try {
-            return Math.divideExact(firstNumber, secondNumber);
-        } catch (ArithmeticException e) {
-            throw new ArithmeticException(ERROR_ARITHMETIC_OVERFLOW);
-        }
+        return firstNumber.divide(secondNumber, NUMBER_SCALE, NUMBER_ROUNDING_MODE);
     }
 }
