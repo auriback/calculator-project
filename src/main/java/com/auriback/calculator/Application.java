@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Application {
     public static final String COMMAND_EXIT = "exit";
     public static final String COMMAND_INPUT_SYMBOL = "> ";
-    public static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s";
+    public static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
 
     public Application(Scanner scanner) {
         this.scanner = scanner;
@@ -28,7 +28,7 @@ public class Application {
             } catch (ArithmeticException | IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             } catch (Exception e) {
-                System.out.println(ERROR_UNEXPECTED.formatted(e.getMessage()));
+                System.out.printf(ERROR_UNEXPECTED, e.getMessage());
             }
         }
     }
