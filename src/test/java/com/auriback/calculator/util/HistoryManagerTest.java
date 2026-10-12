@@ -1,63 +1,67 @@
 package com.auriback.calculator.util;
 
+import com.auriback.calculator.models.Expression;
+import com.auriback.calculator.models.Operation;
+import com.auriback.calculator.models.Operator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HistoryManagerTest {
 
-    @ParameterizedTest(name = "Тест {index}: [{0}]")
-    @ValueSource(strings = {
-            "5.0 + 3.0 = 8.0"
-    })
-    void whenCalculateThenHistorySizeAddOneOperation(String operation) {
-        HistoryManager historyManager = new HistoryManager();
-        historyManager.add(operation);
-        historyManager.add(operation);
-        assertEquals(2, historyManager.size());
+    private HistoryManager historyManager;
+
+    private final Operation operation1 = new Operation(new Expression(new BigDecimal("5.2"), Operator.ADD, new BigDecimal("3")), new BigDecimal("8.2"));
+    private final Operation operation2 = new Operation(new Expression(new BigDecimal("10.3"), Operator.SUBTRACT, new BigDecimal("3.3")), new BigDecimal("7"));
+    private  final Operation operation3 = new Operation(new Expression(new BigDecimal("4.1"), Operator.MULTIPLY, new BigDecimal("6")), new BigDecimal("24.6"));
+    private final Operation operation4 = new Operation(new Expression(BigDecimal.ONE, Operator.DIVIDE, new BigDecimal("3")), new BigDecimal("0.33"));
+
+    @BeforeEach
+    void setUp() {
+        historyManager = new HistoryManager();
     }
 
     @Test
-    void whenClearHistoryThenHistorySizeEquals0() {
-        HistoryManager historyManager = new HistoryManager();
-        historyManager.add("5.0 / 2.0 = 2.5");
-        historyManager.add("3.0 + 4.0 = 7.0");
-        historyManager.add("5.0 + 3.0 = 8.0");
+    void whenAddOperationsThenHistorySizeIncreases() {
+        addTestOperationsToList();
+        assertEquals(4, historyManager.size());
+    }
+
+    @Test
+    void whenClearHistoryThenHistorySizeEqualsZero() {
+        addTestOperationsToList();
         historyManager.clear();
         assertEquals(0, historyManager.size());
     }
 
     @Test
-    void whenRequestLastOperationThenGetLastOperation() {
-        HistoryManager historyManager = new HistoryManager();
-        String firstOperation = "5.0 / 2.0 = 2.5";
-        String lastOperation = "3.0 + 4.0 = 7.0";
-        historyManager.add(firstOperation);
-        historyManager.add(lastOperation);
-        assertEquals(lastOperation, historyManager.getLast());
+    void whenRequestLastOperationThenGetLastAdded() {
+        addTestOperationsToList();
+        assertEquals(operation4, historyManager.getLast());
     }
 
     @Test
-    void whenAddMoreTenOperationsThenOnlyTenRemain() {
-        HistoryManager historyManager = new HistoryManager();
-        historyManager.add("5.0 / 2.0 = 2.5");
-        historyManager.add("3.0 + 4.0 = 7.0");
-        historyManager.add("5.0 + 3.0 = 8.0");
-        historyManager.add("5.0 / 2.0 = 2.5");
-        historyManager.add("3.0 + 4.0 = 7.0");
-        historyManager.add("5.0 + 3.0 = 8.0");
-        historyManager.add("5.0 / 2.0 = 2.5");
-        historyManager.add("3.0 + 4.0 = 7.0");
-        historyManager.add("5.0 + 3.0 = 8.0");
-        historyManager.add("5.0 + 3.0 = 8.0");
+    void whenAddMoreThanMaxOperationsThenOldestAreRemoved() {
+        historyManager.add(operation3);
+        for (int i = 0; i < 9; i++) {
+            historyManager.add(operation1);
+        }
+        historyManager.add(operation2);
 
-        String lastOperation = "5.0 / 2.0 = 2.5";
-        historyManager.add(lastOperation);
         assertAll(
                 () -> assertEquals(10, historyManager.size()),
-                () -> assertEquals(lastOperation, historyManager.getLast()));
+                () -> assertEquals(operation2, historyManager.getLast()),
+                () -> assertEquals(operation1, historyManager.getHistoryOperations().getFirst()));
+    }
+
+    private void addTestOperationsToList() {
+        historyManager.add(operation1);
+        historyManager.add(operation2);
+        historyManager.add(operation3);
+        historyManager.add(operation4);
     }
 }
