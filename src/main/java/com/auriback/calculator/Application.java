@@ -5,6 +5,7 @@ import com.auriback.calculator.models.Operation;
 import com.auriback.calculator.util.Calculator;
 import com.auriback.calculator.util.HistoryManager;
 import com.auriback.calculator.util.InputParser;
+import com.auriback.calculator.util.Printer;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -14,10 +15,8 @@ public class Application {
     private static final String COMMAND_HISTORY = "history";
     private static final String COMMAND_CLEAR = "clear";
     private static final String COMMAND_LAST_OPERATION = "last";
-    private static final String COMMAND_INPUT_SYMBOL = "> ";
+    private static final String COMMAND_HELP = "help";
     private static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
-    private static final String MSG_HISTORY_EMPTY = "История операций пуста";
-    private static final String MSG_HISTORY_CLEAR = "История операций очищена";
 
     private final Scanner scanner;
     private final HistoryManager historyManager;
@@ -33,9 +32,9 @@ public class Application {
             try {
                 processing();
             } catch (ArithmeticException | IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                Printer.printError(e.getMessage());
             } catch (Exception e) {
-                System.out.printf(ERROR_UNEXPECTED, e.getMessage());
+                Printer.printErrorFormat(ERROR_UNEXPECTED, e.getMessage());
             }
         }
     }
@@ -52,6 +51,7 @@ public class Application {
             case COMMAND_HISTORY -> this::printHistory;
             case COMMAND_CLEAR -> this::clearHistoryWithPrompt;
             case COMMAND_LAST_OPERATION -> this::processLastOperation;
+            case COMMAND_HELP -> this::printHelp;
             default -> () -> calculateAndRecord(input);
         };
 
@@ -59,7 +59,7 @@ public class Application {
     }
 
     private String readInput() {
-        System.out.print(COMMAND_INPUT_SYMBOL);
+        Printer.printInputPrompt();
 
         if (!scanner.hasNextLine()) {
             stopInput();
@@ -74,22 +74,18 @@ public class Application {
     }
 
     private void printHistory() {
-        if (historyManager.size() == 0) {
-            System.out.println(MSG_HISTORY_EMPTY);
-            return;
-        }
-        historyManager.getHistoryOperations().forEach(System.out::println);
+        Printer.printHistory(historyManager.getHistoryOperations());
     }
 
     private void clearHistoryWithPrompt() {
         historyManager.clear();
-        System.out.println(MSG_HISTORY_CLEAR);
+        Printer.printMsgClearHistory();
     }
 
     private void processLastOperation() {
         historyManager.getLast().ifPresentOrElse(
-                System.out::println,
-                () -> System.out.println(MSG_HISTORY_EMPTY));
+                Printer::printLastOperation,
+                Printer::printMsgLastOperation);
     }
 
     private void calculateAndRecord(String input) {
@@ -109,10 +105,14 @@ public class Application {
     }
 
     private void printResult(Operation operation) {
-        System.out.println(operation);
+        Printer.printResult(operation);
     }
 
     private void addOperationToHistory(Operation operation) {
         historyManager.add(operation);
+    }
+
+    private void printHelp() {
+        Printer.printHelp();
     }
 }

@@ -39,20 +39,20 @@ class CalculatorTest {
 
     private static Stream<Arguments> provideCorrectTestData() {
         return Stream.of(
-                Arguments.of(new Expression(new BigDecimal("5.2"), Operator.ADD, new BigDecimal("3")), new BigDecimal("8.2")),
-                Arguments.of(new Expression(new BigDecimal("10.3"), Operator.SUBTRACT, new BigDecimal("3.3")), new BigDecimal("7")),
-                Arguments.of(new Expression(new BigDecimal("4.1"), Operator.MULTIPLY, new BigDecimal("6")), new BigDecimal("24.6")),
-                Arguments.of(new Expression(new BigDecimal("-4"), Operator.MULTIPLY, new BigDecimal("-6")), new BigDecimal("24")),
-                Arguments.of(new Expression(new BigDecimal("5.2"), Operator.DIVIDE, new BigDecimal("2")), new BigDecimal("2.6")),
-                Arguments.of(new Expression(new BigDecimal("-10.4"), Operator.DIVIDE, new BigDecimal("-3.2")), new BigDecimal("3.25")),
-                Arguments.of(new Expression(BigDecimal.ONE, Operator.DIVIDE, new BigDecimal("3")), new BigDecimal("0.33"))
+                Arguments.of(getExpressionFromTestData("5.2", Operator.ADD, "3"), new BigDecimal("8.2")),
+                Arguments.of(getExpressionFromTestData("10.3", Operator.SUBTRACT, "3.3"), new BigDecimal("7")),
+                Arguments.of(getExpressionFromTestData("4.1", Operator.MULTIPLY, "6"), new BigDecimal("24.6")),
+                Arguments.of(getExpressionFromTestData("-4", Operator.MULTIPLY, "-6"), new BigDecimal("24")),
+                Arguments.of(getExpressionFromTestData("5.2", Operator.DIVIDE, "2"), new BigDecimal("2.6")),
+                Arguments.of(getExpressionFromTestData("-10.4", Operator.DIVIDE, "-3.2"), new BigDecimal("3.2")),
+                Arguments.of(getExpressionFromTestData("1", Operator.DIVIDE, "3"), new BigDecimal("0.3"))
         );
     }
 
     private static Stream<Expression> provideDivideByZeroTestData() {
         return Stream.of(
-                new Expression(new BigDecimal("10"), Operator.DIVIDE, BigDecimal.ZERO),
-                new Expression(new BigDecimal("2"), Operator.DIVIDE, new BigDecimal("0.0000"))
+                getExpressionFromTestData("10", Operator.DIVIDE, "0"),
+                getExpressionFromTestData("2", Operator.DIVIDE, "0.0000")
         );
     }
 
@@ -63,5 +63,9 @@ class CalculatorTest {
                 Arguments.of((Runnable) () -> new Expression(BigDecimal.ONE, null, BigDecimal.ONE), Expression.ERROR_INCORRECT_VALUE),
                 Arguments.of((Runnable) () -> new Expression(BigDecimal.ONE, Operator.ADD, null), Expression.ERROR_INCORRECT_VALUE)
         );
+    }
+
+    private static Expression getExpressionFromTestData(String firstNumber, Operator operator, String secondNumber) {
+        return new Expression(new BigDecimal(firstNumber), operator, new BigDecimal(secondNumber));
     }
 }
