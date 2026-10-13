@@ -95,7 +95,7 @@ public class Application {
 
     private void processLastOperation() {
         historyManager.getLast().ifPresentOrElse(
-                System.out::println,
+                operation -> System.out.printf(TEMPLATE_CALC_RESULT, operation.result()),
                 () -> System.out.println(MSG_HISTORY_EMPTY));
     }
 
