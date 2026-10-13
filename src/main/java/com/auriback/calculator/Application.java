@@ -7,6 +7,7 @@ import com.auriback.calculator.util.HistoryManager;
 import com.auriback.calculator.util.InputParser;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
@@ -75,11 +76,16 @@ public class Application {
     }
 
     private void printHistory() {
-        if (historyManager.size() == 0) {
+        List<Operation> history = historyManager.getHistoryOperations();
+
+        if (history.isEmpty()) {
             System.out.println(MSG_HISTORY_EMPTY);
             return;
         }
-        historyManager.getHistoryOperations().forEach(System.out::println);
+
+        for (int i = 1; i <= history.size(); i++) {
+            System.out.println(i + ") " + history.get(i - 1));
+        }
     }
 
     private void clearHistoryWithPrompt() {
