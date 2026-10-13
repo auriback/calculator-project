@@ -15,10 +15,10 @@ class HistoryManagerTest {
 
     private HistoryManager historyManager;
 
-    private final Operation operation1 = new Operation(new Expression(new BigDecimal("5.2"), Operator.ADD, new BigDecimal("3")), new BigDecimal("8.2"));
-    private final Operation operation2 = new Operation(new Expression(new BigDecimal("10.3"), Operator.SUBTRACT, new BigDecimal("3.3")), new BigDecimal("7"));
-    private  final Operation operation3 = new Operation(new Expression(new BigDecimal("4.1"), Operator.MULTIPLY, new BigDecimal("6")), new BigDecimal("24.6"));
-    private final Operation operation4 = new Operation(new Expression(BigDecimal.ONE, Operator.DIVIDE, new BigDecimal("3")), new BigDecimal("0.33"));
+    private final Operation operation1 = createOperation("5.2", Operator.ADD, "3", "8.2");
+    private final Operation operation2 = createOperation("10.3", Operator.SUBTRACT, "3.3", "7");
+    private final Operation operation3 = createOperation("4.1", Operator.MULTIPLY, "6", "24.6");
+    private final Operation operation4 = createOperation("1", Operator.DIVIDE, "3", "0.33");
 
     @BeforeEach
     void setUp() {
@@ -63,5 +63,10 @@ class HistoryManagerTest {
         historyManager.add(operation2);
         historyManager.add(operation3);
         historyManager.add(operation4);
+    }
+
+    private static Operation createOperation(String firstNumber, Operator operator, String secondNumber, String expectedResult) {
+        Expression expression = new Expression(new BigDecimal(firstNumber), operator, new BigDecimal(secondNumber));
+        return new Operation(expression, new BigDecimal(expectedResult));
     }
 }
