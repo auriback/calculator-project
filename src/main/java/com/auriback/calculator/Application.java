@@ -16,8 +16,8 @@ public class Application {
     private static final String COMMAND_LAST_OPERATION = "last";
     private static final String COMMAND_INPUT_SYMBOL = "> ";
     private static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
-    private static final String MSG_HISTORY_EMPTY = "История операций пуста";
-    private static final String MSG_HISTORY_CLEAR = "История операций очищена";
+    private static final String MSG_HISTORY_EMPTY = "История пуста";
+    private static final String MSG_HISTORY_CLEAR = "История очищена";
     private static final String TEMPLATE_CALC_RESULT = "Результат: %s%n";
 
     private final Scanner scanner;
