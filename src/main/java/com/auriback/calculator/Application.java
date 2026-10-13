@@ -15,6 +15,7 @@ public class Application {
     private static final String COMMAND_HISTORY = "history";
     private static final String COMMAND_CLEAR = "clear";
     private static final String COMMAND_LAST_OPERATION = "last";
+    private static final String COMMAND_HELP = "help";
     private static final String COMMAND_INPUT_SYMBOL = "> ";
     private static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
     private static final String MSG_HISTORY_EMPTY = "История пуста";
@@ -54,6 +55,7 @@ public class Application {
             case COMMAND_HISTORY -> this::printHistory;
             case COMMAND_CLEAR -> this::clearHistoryWithPrompt;
             case COMMAND_LAST_OPERATION -> this::processLastOperation;
+            case COMMAND_HELP -> this::printHelp;
             default -> () -> calculateAndRecord(input);
         };
 
@@ -121,5 +123,24 @@ public class Application {
 
     private void addOperationToHistory(Operation operation) {
         historyManager.add(operation);
+    }
+
+    private void printHelp() {
+        System.out.println("""
+                Доступные команды:
+                
+                <число> <оператор> <число>
+                
+                Операторы:
+                +  сложение
+                -  вычитание
+                *  умножение
+                /  деление
+                
+                Дополнительные команды:
+                history  — показать историю
+                last     — повторить последнюю операцию
+                clear    — очистить историю
+                exit     — выход""");
     }
 }
