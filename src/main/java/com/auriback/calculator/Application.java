@@ -18,6 +18,7 @@ public class Application {
     private static final String ERROR_UNEXPECTED = "Произошла непредвиденная ошибка приложения: %s%n";
     private static final String MSG_HISTORY_EMPTY = "История операций пуста";
     private static final String MSG_HISTORY_CLEAR = "История операций очищена";
+    private static final String TEMPLATE_CALC_RESULT = "Результат: %s%n";
 
     private final Scanner scanner;
     private final HistoryManager historyManager;
@@ -109,7 +110,7 @@ public class Application {
     }
 
     private void printResult(Operation operation) {
-        System.out.println(operation);
+        System.out.printf(TEMPLATE_CALC_RESULT, operation.result().toPlainString());
     }
 
     private void addOperationToHistory(Operation operation) {
