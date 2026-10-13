@@ -44,8 +44,8 @@ class CalculatorTest {
                 Arguments.of(new Expression(new BigDecimal("4.1"), Operator.MULTIPLY, new BigDecimal("6")), new BigDecimal("24.6")),
                 Arguments.of(new Expression(new BigDecimal("-4"), Operator.MULTIPLY, new BigDecimal("-6")), new BigDecimal("24")),
                 Arguments.of(new Expression(new BigDecimal("5.2"), Operator.DIVIDE, new BigDecimal("2")), new BigDecimal("2.6")),
-                Arguments.of(new Expression(new BigDecimal("-10.4"), Operator.DIVIDE, new BigDecimal("-3.2")), new BigDecimal("3.25")),
-                Arguments.of(new Expression(BigDecimal.ONE, Operator.DIVIDE, new BigDecimal("3")), new BigDecimal("0.33"))
+                Arguments.of(new Expression(new BigDecimal("-10.4"), Operator.DIVIDE, new BigDecimal("-3.2")), new BigDecimal("3.2")),
+                Arguments.of(new Expression(BigDecimal.ONE, Operator.DIVIDE, new BigDecimal("3")), new BigDecimal("0.3"))
         );
     }
 

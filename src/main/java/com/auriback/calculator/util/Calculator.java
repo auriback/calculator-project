@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Calculator {
     public static final String ERROR_DIVISION_BY_ZERO = "Ошибка: деление на ноль";
     public static final String ERROR_INCORRECT_VALUE = "Ошибка: Значение выражения не может быть NULL";
-    private static final int NUMBER_SCALE = 2;
+    private static final int NUMBER_SCALE = 1;
     private static final RoundingMode NUMBER_ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
     private Calculator() {
